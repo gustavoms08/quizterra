@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bio da Terra: Evolução Completa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700&family=Montserrat:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --primaria: #00d2ff; --ouro: #ffcc00; --bg: #050505; 
+            --sucesso: #28a745; --erro: #dc3545;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Montserrat', sans-serif; background: var(--bg); color: white; overflow: hidden; height: 100vh; }
+        canvas { position: fixed; top: 0; left: 0; z-index: -1; }
+
+        .slide {
+            position: absolute; width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            padding: 20px; opacity: 0; pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        .slide.ativo { opacity: 1; pointer-events: auto; }
+
+        /* Introdução */
+        .intro-content { text-align: center; max-width: 800px; }
+        .intro-content h1 { font-family: 'Cinzel'; font-size: 3.5rem; color: var(--primaria); margin-bottom: 20px; text-shadow: 0 0 20px rgba(0,210,255,0.5); }
+
+        /* Cartão Lado a Lado */
+        .cartao { 
+            display: grid; grid-template-columns: 1fr 1fr; gap: 30px; 
+            max-width: 1100px; width: 100%; background: rgba(10, 10, 10, 0.95); 
+            padding: 40px; border-radius: 20px; border: 1px solid rgba(0, 210, 255, 0.3);
+            height: 80vh; box-shadow: 0 0 50px rgba(0,0,0,1);
+        }
+
+        .scroll-area { overflow-y: auto; padding-right: 15px; height: 100%; }
+        .scroll-area::-webkit-scrollbar { width: 6px; }
+        .scroll-area::-webkit-scrollbar-thumb { background: var(--primaria); border-radius: 10px; }
+
+        h2 { font-family: 'Cinzel'; color: var(--primaria); font-size: 1.5rem; margin-bottom: 15px; border-bottom: 2px solid var(--primaria); padding-bottom: 10px; }
+        p { font-size: 0.95rem; line-height: 1.7; color: #f0f0f0; margin-bottom: 15px; text-align: justify; }
+        b { color: var(--ouro); }
+
+        .img-box { width: 100%; height: 100%; border-radius: 15px; overflow: hidden; border: 1px solid #444; background: #111; }
+        .img-box img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* Quiz */
+        .pergunta { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; margin-bottom: 25px; border: 1px solid #333; }
+        .opt { display: block; width: 100%; text-align: left; padding: 12px; margin: 8px 0; background: rgba(255,255,255,0.1); border: 1px solid #555; color: white; cursor: pointer; border-radius: 8px; transition: 0.2s; }
+        .opt:hover { background: rgba(0, 210, 255, 0.2); }
+        .opt.certo { background: var(--sucesso) !important; border-color: var(--sucesso); }
+        .opt.errado { background: var(--erro) !important; border-color: var(--erro); }
+
+        /* Navegação */
+        .controles { position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%); display: flex; gap: 20px; z-index: 100; }
+        .btn { background: rgba(0, 210, 255, 0.1); border: 1px solid var(--primaria); color: white; padding: 12px 30px; cursor: pointer; border-radius: 6px; font-weight: bold; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; }
+        .btn:hover:not(:disabled) { background: var(--primaria); color: black; box-shadow: 0 0 15px var(--primaria); }
+        .btn:disabled { opacity: 0.1; cursor: not-allowed; }
+
+        @media (max-width: 900px) { .cartao { grid-template-columns: 1fr; height: 85vh; } .img-box { display: none; } }
+    </style>
+</head>
+<body>
+
+    <canvas id="fundo"></canvas>
+
+    <div class="slide ativo">
+        <div class="intro-content">
+            <h1>A Evolução da Terra</h1>
+            <p>Uma jornada científica por 4,6 bilhões de anos, desde a poeira cósmica até a civilização moderna.</p>
+            <button class="btn" style="margin-top: 40px;" onclick="mudar(1)">Começar Jornada</button>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="cartao">
+            <div class="scroll-area">
+                <h2>1. Nebulosa e Acreção</h2>
+                <p>Tudo começou há <b>4,6 bilhões de anos</b> com o colapso de uma nebulosa solar. Partículas de poeira e gás giravam e se colidiam.</p>
+                <p>Através da <b>acreção</b>, pequenas rochas se tornaram planetesimais e, finalmente, o protoplaneta Terra, aquecido por impactos constantes.</p>
+            </div>
+            <div class="img-box"><img src="" class="galeria" alt="Nebulosa"></div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="cartao">
+            <div class="img-box"><img src="" class="galeria" alt="Camadas Internas"></div>
+            <div class="scroll-area">
+                <h2>2. O Coração de Ferro</h2>
+                <p>O calor extremo derreteu o planeta jovem. O <b>ferro e níquel</b>, mais pesados, afundaram para formar o núcleo metálico.</p>
+                <p>Elementos leves flutuaram, criando o manto rochoso e a fina crosta externa. Este processo é a <b>diferenciação planetária</b>.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="cartao">
+            <div class="scroll-area">
+                <h2>3. Vulcões e Gases</h2>
+                <p>A primeira atmosfera não tinha oxigênio. Ela vinha de violentas <b>erupções vulcânicas</b> que liberavam vapor d'água, CO2, metano e amônia.</p>
+                <p>O céu era avermelhado e a pressão atmosférica era esmagadora em comparação com a atual.</p>
+            </div>
+            <div class="img-box"><img src="" class="galeria" alt="Vulcão"></div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="cartao">
+            <div class="img-box"><img src="" class="galeria" alt="Oceanos Antigos"></div>
+            <div class="scroll-area">
+                <h2>4. O Nascimento dos Oceanos</h2>
+                <p>Conforme a Terra resfriou, o vapor d'água condensou em <b>chuvas monumentais</b> que duraram milhões de anos.</p>
+                <p>A água preencheu as bacias da crosta, dissolvendo minerais e criando o "caldo primordial" necessário para a vida.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="cartao">
+            <div class="scroll-area">
+                <h2>5. O Grande Evento de Oxidação</h2>
+                <p>Há 3,5 bilhões de anos, as <b>cianobactérias</b> surgiram. Elas foram os primeiros seres a realizar a fotossíntese.</p>
+                <p>O subproduto, o <b>oxigênio</b>, mudou quimicamente os oceanos e a atmosfera, permitindo a vida complexa no futuro.</p>
+            </div>
+            <div class="img-box"><img src="" class="galeria" alt="Cianobactérias"></div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="cartao">
+            <div class="img-box"><img src="" class="galeria" alt="Fóssil Cambriano"></div>
+            <div class="scroll-area">
+                <h2>6. Explosão de Vida</h2>
+                <p>No período <b>Cambriano</b>, houve um aumento súbito na diversidade biológica. Surgiram os trilobitas e os primeiros animais com conchas.</p>
+                <p>A vida deixou de ser apenas microscópica para ocupar todos os nichos dos oceanos.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="cartao">
+            <div class="scroll-area">
+                <h2>7. O Supercontinente</h2>
+                <p>Na Era Mesozoica, todas as massas de terra estavam unidas na <b>Pangeia</b>. O clima global era muito mais quente e uniforme.</p>
+                <p>As correntes de convecção do manto começaram a separar esse bloco nos continentes que conhecemos hoje.</p>
+            </div>
+            <div class="img-box"><img src="" class="galeria" alt="Pangeia"></div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="cartao">
+            <div class="img-box"><img src="" class="galeria" alt="Dinossauro"></div>
+            <div class="scroll-area">
+                <h2>8. Domínio dos Répteis</h2>
+                <p>Durante milhões de anos, os <b>dinossauros</b> foram os predadores e herbívoros dominantes da terra firme.</p>
+                <p>Sua extinção há 66 milhões de anos abriu espaço para o desenvolvimento dos pequenos mamíferos.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="cartao">
+            <div class="scroll-area">
+                <h2>9. Geologia Moderna</h2>
+                <p>A <b>Tectônica de Placas</b> continua ativa. O Himalaia ainda está subindo e o Atlântico está se alargando.</p>
+                <p>Terremotos e vulcões são provas de que o interior da Terra ainda armazena o calor de sua formação.</p>
+            </div>
+            <div class="img-box"><img src="" class="galeria" alt="Placas Tectônicas"></div>
+        </div>
+    </div>
+
+    <div class="slide">
+        <div class="cartao" style="grid-template-columns: 1fr;">
+            <div class="scroll-area" id="boxQuiz">
+                <h2 style="text-align: center; border: none;">Desafio Final: 10 Questões</h2>
+            </div>
+        </div>
+    </div>
+
+    <div class="controles" id="nav" style="display: none;">
+        <button class="btn" onclick="mudar(-1)" id="btnAnt">Anterior</button>
+        <button class="btn" onclick="mudar(1)" id="btnProx">Próximo</button>
+    </div>
+
+    <script>
+      /**************************************************************
+         * CENTRAL DE IMAGENS - ARQUIVOS LOCAIS (Pasta: projetobeatriz)
+         **************************************************************/
+        const linksImagens = [
+            "nebulosa.jpg",                 // Slide 1
+            "camadasdaterra.jpeg",          // Slide 2
+            "vulcao.jpg",                   // Slide 3
+            "oceanos.jpg",                  // Slide 4
+            "https://images.unsplash.com/photo-1502134249126-9f3755a50d78?w=800",// Slide 5 
+            "periodo-cambriano.jpeg",       // Slide 6
+            "pangeia.png",                  // Slide 7
+            "populacaodedinossauros.webp",  // Slide 8
+            "placastectonicas.png"          // Slide 9
+        ];
+
+        // Função para carregar imagens automaticamente
+        function carregarGaleria() {
+            const imagensHTML = document.querySelectorAll('.galeria');
+            imagensHTML.forEach((img, index) => {
+                if (linksImagens[index] && linksImagens[index] !== "") {
+                    img.src = linksImagens[index];
+                } else {
+                    // Caso não tenha imagem, ele pode mostrar um fundo escuro ou aviso
+                    img.alt = "Imagem não encontrada ou pendente";
+                    img.style.display = "flex";
+                    img.style.alignItems = "center";
+                    img.style.justifyContent = "center";
+                }
+            });
+        }
+        carregarGaleria();
+
+        /**************************************************************
+         * LOGICA DO SITE (FUNDO, NAVEGAÇÃO, QUIZ)
+         **************************************************************/
+
+        // Fundo Estrelado
+        const canvas = document.getElementById('fundo');
+        const ctx = canvas.getContext('2d');
+        let estrelas = [];
+        function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        window.onresize = resize; resize();
+        for(let i=0; i<150; i++) estrelas.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: Math.random()*1.5});
+        function animar() {
+            ctx.clearRect(0,0,canvas.width, canvas.height); ctx.fillStyle = "white";
+            estrelas.forEach(e => { ctx.beginPath(); ctx.arc(e.x, e.y, e.r, 0, Math.PI*2); ctx.fill(); e.y -= 0.15; if(e.y < 0) e.y = canvas.height; });
+            requestAnimationFrame(animar);
+        }
+        animar();
+
+        // Navegação
+        let atual = 0;
+        const slides = document.querySelectorAll('.slide');
+        function mudar(dir) {
+            slides[atual].classList.remove('ativo');
+            atual += dir;
+            slides[atual].classList.add('ativo');
+            document.getElementById('nav').style.display = atual > 0 ? 'flex' : 'none';
+            document.getElementById('btnAnt').disabled = (atual === 1);
+            document.getElementById('btnProx').disabled = (atual === slides.length - 1);
+        }
+
+        // Quiz
+        const perguntas = [
+            { q: "Qual a idade da Terra?", a: ["4,6 bilhões", "2 bilhões", "10 bilhões"], c: 0 },
+            { q: "Como se chama o processo de aglomeração da poeira cósmica?", a: ["Fusão", "Acreção", "Erosão"], c: 1 },
+            { q: "Quais os metais do núcleo?", a: ["Ouro e Prata", "Ferro e Níquel", "Cobre e Zinco"], c: 1 },
+            { q: "Onde surgiu o oxigênio?", a: ["Vulcões", "Cianobactérias", "Chuvas"], c: 1 },
+            { q: "O que gerou os oceanos?", a: ["Meteoros", "Gelo derretido", "Condensação de vapor"], c: 2 },
+            { q: "Qual o nome do supercontinente antigo?", a: ["Pangeia", "Atlântida", "Gondwana"], c: 0 },
+            { q: "Período do aumento súbito de biodiversidade?", a: ["Cretáceo", "Cambriano", "Jurássico"], c: 1 },
+            { q: "O que move os continentes?", a: ["Ventos", "Marés", "Tectônica de Placas"], c: 2 },
+            { q: "Por que o oxigênio foi importante?", a: ["Criou o ozônio", "Esquentou a Terra", "Criou vulcões"], c: 0 },
+            { q: "Em qual Era vivemos hoje?", a: ["Mesozoica", "Paleozoica", "Cenozoica"], c: 2 }
+        ];
+
+        const container = document.getElementById('boxQuiz');
+        perguntas.forEach((p, i) => {
+            const div = document.createElement('div');
+            div.className = 'pergunta';
+            div.innerHTML = `<p><b>${i+1}. ${p.q}</b></p>`;
+            p.a.forEach((opt, idx) => {
+                const btn = document.createElement('button');
+                btn.className = 'opt';
+                btn.innerText = opt;
+                btn.onclick = () => {
+                    if(div.querySelector('.opt:disabled')) return;
+                    div.querySelectorAll('.opt').forEach(b => b.disabled = true);
+                    if(idx === p.c) btn.classList.add('certo');
+                    else { btn.classList.add('errado'); div.querySelectorAll('.opt')[p.c].classList.add('certo'); }
+                };
+                div.appendChild(btn);
+            });
+            container.appendChild(div);
+        });
+    </script>
+</body>
+</html>
